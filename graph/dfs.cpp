@@ -1,0 +1,40 @@
+#include "depth.h"
+#include <iostream>
+void fdepth(apex *graf,int m, int v) {
+    apex *temp=new apex;
+    int kv=0;
+    tknot* tasks;
+    new_null(tasks);
+    int* seen_apex=new int [m];
+    bool* ifseen_apex=new bool [m];
+    temp->n=v-1;
+    temp->next=graf[temp->n].next;
+    add_compon(tasks, *temp);
+    for(int i=0; i<m; i++) ifseen_apex[i]=true;
+    seen_apex[kv++]=temp->n;
+    apex *t;
+    while (!check_empty(tasks)) {
+        read_compon(tasks, *temp);
+        t=temp->next;
+        ifseen_apex[temp->n]=false;
+        bool fl=ifseen_apex[temp->next->n]==false;
+        if(fl) {
+            del_compon(tasks);
+            while(t &&(!ifseen_apex[t->n])) t=t->next;
+            if (t){
+                temp->next=t;
+                add_compon(tasks, *temp);
+            }
+            else if (!fl) del_compon(tasks);
+        } else {
+            temp->n=t->n;
+            temp->next=graf[temp->n].next;
+            add_compon(tasks, *temp);
+            if (ifseen_apex[temp->n]) seen_apex[kv++]=temp->n;
+        }
+    }
+    for(int i=0; i<kv; i++)  cout<<seen_apex[i]+1<<", ";
+    cout<<endl;
+    delete [] seen_apex;
+    delete [] ifseen_apex;
+}
